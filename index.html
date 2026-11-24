@@ -1,0 +1,647 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Who's Here?</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --background: #080808;
+            --gold: #c6a878;
+            --soft-white: #e9e4dc;
+            --muted: #858078;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--background);
+            color: var(--soft-white);
+            font-family: 'DM Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse at 50% 15%, rgba(151, 105, 53, 0.15), transparent 42%),
+                radial-gradient(ellipse at 5% 90%, rgba(105, 68, 38, 0.09), transparent 35%),
+                radial-gradient(ellipse at 95% 80%, rgba(105, 68, 38, 0.08), transparent 35%);
+            z-index: -1;
+        }
+
+        .page {
+            min-height: 100vh;
+            padding: 35px 6%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            isolation: isolate;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeDown 1s ease both;
+        }
+
+        .brand {
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .top-note {
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #77716a;
+            text-transform: uppercase;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 95px 0 60px;
+            animation: reveal 1.2s ease both;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--gold);
+            font-size: 10px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+        }
+
+        .eyebrow::before,
+        .eyebrow::after {
+            content: "";
+            width: 32px;
+            height: 1px;
+            background: var(--gold);
+            opacity: 0.6;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(65px, 10vw, 125px);
+            line-height: 0.85;
+            font-weight: 400;
+            letter-spacing: -4px;
+            color: #f0e9df;
+        }
+
+        h1 span {
+            display: block;
+            font-style: italic;
+            color: var(--gold);
+            font-weight: 400;
+            margin-top: 10px;
+        }
+
+        .hero-description {
+            color: #9b958c;
+            font-size: 13px;
+            line-height: 1.9;
+            font-weight: 300;
+            max-width: 420px;
+            margin: 30px auto 0;
+            letter-spacing: 0.4px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(198, 168, 120, 0.2);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            animation: reveal 1.4s ease both;
+        }
+
+        .section-heading p {
+            font-size: 10px;
+            color: var(--gold);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .section-heading span {
+            font-size: 10px;
+            color: #77716a;
+            letter-spacing: 1px;
+        }
+
+        .people-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            animation: reveal 1.5s ease both;
+        }
+
+        .person-card {
+            position: relative;
+            display: block;
+            height: clamp(310px, 40vw, 510px);
+            overflow: hidden;
+            text-decoration: none;
+            background: #171513;
+            border: 1px solid rgba(198, 168, 120, 0.16);
+            isolation: isolate;
+            transition: border-color 0.5s ease, transform 0.5s ease;
+        }
+
+        .person-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to top,
+                rgba(0, 0, 0, 0.95) 0%,
+                rgba(0, 0, 0, 0.5) 28%,
+                rgba(0, 0, 0, 0.04) 70%
+            );
+            z-index: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .person-card img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            filter: brightness(0.78) saturate(0.78);
+            transition: transform 1s cubic-bezier(0.2, 0.7, 0.2, 1),
+                        filter 0.7s ease;
+        }
+
+        .card-top {
+            position: absolute;
+            z-index: 2;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-number {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 10px;
+            letter-spacing: 2px;
+        }
+
+        .card-symbol {
+            width: 29px;
+            height: 29px;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            color: white;
+            font-size: 14px;
+            transition: background 0.4s ease, color 0.4s ease, transform 0.4s ease;
+        }
+
+        .card-content {
+            position: absolute;
+            z-index: 2;
+            bottom: 25px;
+            left: 22px;
+            right: 22px;
+            transform: translateY(8px);
+            transition: transform 0.5s ease;
+        }
+
+        .card-label {
+            color: var(--gold);
+            font-size: 9px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .card-content h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(29px, 3vw, 43px);
+            font-weight: 500;
+            color: #fff;
+            line-height: 1;
+        }
+
+        .card-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.28);
+            opacity: 0.8;
+            transition: opacity 0.4s ease;
+        }
+
+        .card-bottom span {
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #e4ded4;
+        }
+
+        .person-card:hover {
+            border-color: rgba(198, 168, 120, 0.8);
+            transform: translateY(-7px);
+        }
+
+        .person-card:hover img {
+            transform: scale(1.09);
+            filter: brightness(0.95) saturate(0.95);
+        }
+
+        .person-card:hover .card-content {
+            transform: translateY(0);
+        }
+
+        .person-card:hover .card-bottom {
+            opacity: 1;
+        }
+
+        .person-card:hover .card-symbol {
+            background: var(--gold);
+            color: #111;
+            border-color: var(--gold);
+            transform: rotate(45deg);
+        }
+
+        .closing {
+            text-align: center;
+            margin: 85px auto 65px;
+            max-width: 550px;
+            animation: reveal 1.8s ease both;
+        }
+
+        .closing-line {
+            width: 45px;
+            height: 1px;
+            background: var(--gold);
+            margin: 0 auto 25px;
+        }
+
+        .closing h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+            font-size: clamp(28px, 4vw, 40px);
+            color: #e9e0d3;
+            font-style: italic;
+        }
+
+        .closing p {
+            color: #77716a;
+            font-size: 11px;
+            line-height: 1.9;
+            margin-top: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        footer {
+            margin-top: auto;
+            padding-top: 22px;
+            border-top: 1px solid rgba(198, 168, 120, 0.17);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        footer p {
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: #77716a;
+            text-transform: uppercase;
+        }
+
+        footer span {
+            color: var(--gold);
+        }
+
+        @keyframes reveal {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                padding: 28px 5%;
+            }
+
+            .hero {
+                padding: 80px 0 50px;
+            }
+
+            .people-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 15px;
+            }
+
+            .person-card {
+                height: clamp(300px, 58vw, 460px);
+            }
+
+            .card-content h2 {
+                font-size: clamp(30px, 5vw, 42px);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .page {
+                padding: 22px 18px;
+            }
+
+            .top-note {
+                font-size: 8px;
+                letter-spacing: 1px;
+            }
+
+            .brand {
+                font-size: 9px;
+                letter-spacing: 2px;
+            }
+
+            .hero {
+                padding: 85px 0 45px;
+            }
+
+            h1 {
+                font-size: clamp(62px, 16vw, 85px);
+                letter-spacing: -2px;
+            }
+
+            .eyebrow {
+                font-size: 8px;
+                letter-spacing: 3px;
+            }
+
+            .hero-description {
+                font-size: 12px;
+                max-width: 290px;
+            }
+
+            .section-heading p {
+                font-size: 9px;
+                letter-spacing: 2px;
+            }
+
+            .section-heading span {
+                font-size: 8px;
+            }
+
+            .people-grid {
+                gap: 10px;
+            }
+
+            .person-card {
+                height: 310px;
+            }
+
+            .card-top {
+                top: 13px;
+                left: 12px;
+                right: 12px;
+            }
+
+            .card-number {
+                font-size: 8px;
+            }
+
+            .card-symbol {
+                width: 25px;
+                height: 25px;
+                font-size: 12px;
+            }
+
+            .card-content {
+                left: 13px;
+                right: 13px;
+                bottom: 15px;
+            }
+
+            .card-label {
+                font-size: 8px;
+                letter-spacing: 2px;
+            }
+
+            .card-content h2 {
+                font-size: clamp(25px, 7vw, 34px);
+            }
+
+            .card-bottom {
+                margin-top: 12px;
+                padding-top: 10px;
+            }
+
+            .card-bottom span {
+                font-size: 7px;
+                letter-spacing: 1px;
+            }
+
+            .closing {
+                margin: 70px auto 55px;
+            }
+
+            .closing p {
+                font-size: 10px;
+            }
+
+            footer p {
+                font-size: 7px;
+                letter-spacing: 1px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="page">
+
+        <header class="topbar">
+            <div class="brand">A COLLECTION OF MOMENTS</div>
+            <div class="top-note">A little something to remember</div>
+        </header>
+
+        <section class="hero">
+            <div class="eyebrow">ONE LAST LITTLE MOMENT</div>
+
+            <h1>
+                Who's
+                <span>Here?</span>
+            </h1>
+
+            <p class="hero-description">
+                Every person leaves a different kind of mark.
+                Some through conversations, some through laughter,
+                and some simply by being part of the journey.
+            </p>
+        </section>
+
+        <section class="collection">
+
+            <div class="section-heading">
+                <p>THE COLLECTION</p>
+                <span>04 PEOPLE · 04 STORIES</span>
+            </div>
+
+            <div class="people-grid">
+
+                <a href="ryan.html" class="person-card">
+                    <img src="Kuya Rian.jpg" alt="Kuya Ryan">
+
+                    <div class="card-top">
+                        <span class="card-number">NO. 001</span>
+                        <span class="card-symbol">↗</span>
+                    </div>
+
+                    <div class="card-content">
+                        <p class="card-label">A story of its own</p>
+                        <h2>Ryan</h2>
+
+                        <div class="card-bottom">
+                            <span>Open this memory</span>
+                            <span>01 / 04</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="Daisy.html" class="person-card">
+                    <img src="Ate Daisy.jpg" alt="Ate Daisy">
+
+                    <div class="card-top">
+                        <span class="card-number">NO. 002</span>
+                        <span class="card-symbol">↗</span>
+                    </div>
+
+                    <div class="card-content">
+                        <p class="card-label">A story of its own</p>
+                        <h2>Daisy</h2>
+
+                        <div class="card-bottom">
+                            <span>Open this memory</span>
+                            <span>02 / 04</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="raiden.html" class="person-card">
+                    <img src="Aden2.jpg" alt="Raiden">
+
+                    <div class="card-top">
+                        <span class="card-number">NO. 003</span>
+                        <span class="card-symbol">↗</span>
+                    </div>
+
+                    <div class="card-content">
+                        <p class="card-label">A story of its own</p>
+                        <h2>Raiden</h2>
+
+                        <div class="card-bottom">
+                            <span>Open this memory</span>
+                            <span>03 / 04</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="ateaby.html" class="person-card">
+                    <img src="AteAby.jpg" alt="Ate Abegail">
+
+                    <div class="card-top">
+                        <span class="card-number">NO. 004</span>
+                        <span class="card-symbol">↗</span>
+                    </div>
+
+                    <div class="card-content">
+                        <p class="card-label">A story of its own</p>
+                        <h2>Abegail</h2>
+
+                        <div class="card-bottom">
+                            <span>Open this memory</span>
+                            <span>04 / 04</span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <section class="closing">
+            <div class="closing-line"></div>
+
+            <h3>Some people are worth remembering.</h3>
+
+            <p>
+                Not every moment needs to be extraordinary
+                to become something meaningful.
+                Sometimes, simply being there is enough.
+            </p>
+        </section>
+
+        <footer>
+            <p>MADE WITH <span>♥</span> AND A LITTLE THOUGHT</p>
+            <p>EVERYONE HAS A <span>STORY.</span></p>
+        </footer>
+
+    </main>
+
+</body>
+</html>

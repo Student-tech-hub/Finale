@@ -1,0 +1,764 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>For Ate Daisy</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #080808;
+            color: #eee;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            width: 900px;
+            height: 700px;
+            left: 50%;
+            bottom: -400px;
+            transform: translateX(-50%);
+
+            background: radial-gradient(
+                ellipse,
+                rgba(185, 155, 133, 0.3),
+                rgba(120, 75, 55, 0.12) 45%,
+                transparent 70%
+            );
+
+            filter: blur(70px);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            min-height: 100vh;
+            margin: auto;
+            padding: 30px 25px;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        .back {
+            display: inline-block;
+            color: #9b8b80;
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        .back:hover {
+            color: white;
+        }
+
+        .hero {
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            animation: appear 1.5s ease;
+        }
+
+        .small-title {
+            color: #a89b92;
+            font-size: 11px;
+            letter-spacing: 6px;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: clamp(45px, 9vw, 100px);
+            font-weight: 300;
+            letter-spacing: 3px;
+        }
+
+        h1 span {
+            color: #b99b85;
+            font-style: italic;
+        }
+
+        .hero p {
+            color: #888;
+            margin-top: 25px;
+            font-size: 15px;
+            line-height: 1.8;
+            max-width: 500px;
+        }
+
+        .enter {
+            margin-top: 40px;
+            padding: 15px 30px;
+            border: 1px solid #514239;
+            border-radius: 30px;
+            color: #c5b4a7;
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 2px;
+            transition: 0.4s;
+        }
+
+        .enter:hover {
+            background: #b99b85;
+            color: #080808;
+            border-color: #b99b85;
+            transform: translateY(-4px);
+        }
+
+        section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title p {
+            color: #a89b92;
+            font-size: 11px;
+            letter-spacing: 5px;
+            margin-bottom: 15px;
+        }
+
+        .section-title h2 {
+            font-size: clamp(30px, 5vw, 50px);
+            font-weight: 300;
+        }
+
+        .section-title h2 span {
+            color: #b99b85;
+            font-style: italic;
+        }
+
+        .memory-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 35px;
+            align-items: center;
+
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid #292421;
+            border-radius: 25px;
+            padding: 25px;
+            transition: 0.4s;
+        }
+
+        .memory-card:hover {
+            border-color: #665044;
+            transform: translateY(-5px);
+        }
+
+        .memory-image {
+            width: 100%;
+            height: 400px;
+
+            background-image: url("Daisy2.jpg");
+            background-size: cover;
+            background-position: center;
+
+            border-radius: 18px;
+        }
+
+        .memory-text {
+            padding: 20px;
+        }
+
+        .memory-text .number {
+            color: #a89b92;
+            font-size: 11px;
+            letter-spacing: 4px;
+        }
+
+        .memory-text h3 {
+            font-size: 30px;
+            font-weight: 300;
+            margin: 20px 0;
+            color: #d7c4b5;
+        }
+
+        .memory-text p {
+            color: #888;
+            line-height: 2;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .gallery-item {
+            height: 300px;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid #302923;
+            transition: 0.4s;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.5s;
+        }
+
+        .gallery-item:hover {
+            border-color: #b99b85;
+            transform: translateY(-8px);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .quote {
+            text-align: center;
+            padding: 70px 20px;
+            border-top: 1px solid #292421;
+            border-bottom: 1px solid #292421;
+        }
+
+        .quote p {
+            font-size: clamp(22px, 4vw, 40px);
+            font-weight: 300;
+            line-height: 1.7;
+            color: #c5b4a7;
+            max-width: 750px;
+            margin: auto;
+        }
+
+        .quote span {
+            display: block;
+            margin-top: 25px;
+            color: #666;
+            font-size: 11px;
+            letter-spacing: 4px;
+        }
+
+        /* LETTER COVER */
+
+        .letter-shell {
+            max-width: 700px;
+            margin: auto;
+            perspective: 1200px;
+        }
+
+        .letter-cover {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            min-height: 300px;
+            padding: 45px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+
+            text-align: left;
+            cursor: pointer;
+
+            background: #11100f;
+            border: 1px solid #292421;
+            border-radius: 25px;
+
+            color: #eee;
+            font-family: inherit;
+
+            transform-origin: top center;
+
+            transition:
+                transform 1s ease,
+                opacity 0.7s ease,
+                border-color 0.4s ease;
+        }
+
+        .letter-cover:hover {
+            border-color: #665044;
+        }
+
+        .letter-cover .label {
+            color: #a89b92;
+            font-size: 11px;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+        }
+
+        .letter-cover h3 {
+            color: #d7c4b5;
+            font-size: clamp(28px, 5vw, 42px);
+            font-weight: 300;
+            line-height: 1.4;
+            margin-bottom: 25px;
+        }
+
+        .letter-cover .open-hint {
+            color: #777;
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+        .letter-cover .paper-line {
+            width: 100%;
+            height: 1px;
+            background: #292421;
+            margin: 10px 0 20px;
+        }
+
+        .letter-cover .cover-decoration {
+            color: #b99b85;
+            font-size: 25px;
+            font-style: italic;
+            align-self: flex-end;
+        }
+
+        /* LETTER CONTENT */
+
+        .letter-content {
+            position: relative;
+            z-index: 1;
+
+            max-height: 0;
+            opacity: 0;
+            visibility: hidden;
+            overflow: hidden;
+
+            padding: 0 45px;
+
+            background: #0e0d0c;
+            border: 1px solid #292421;
+            border-radius: 25px;
+
+            transition:
+                max-height 1.2s ease,
+                opacity 0.8s ease,
+                padding 0.8s ease,
+                margin 0.8s ease,
+                visibility 0.8s;
+        }
+
+        .letter-content .label {
+            color: #a89b92;
+            font-size: 11px;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+        }
+
+        .letter-content h3 {
+            color: #d7c4b5;
+            font-size: 28px;
+            font-weight: 300;
+            margin-bottom: 25px;
+        }
+
+        .letter-content p {
+            color: #999;
+            font-size: 14px;
+            line-height: 2;
+            margin-bottom: 20px;
+        }
+
+        .signature {
+            color: #b99b85;
+            font-style: italic;
+            margin-top: 35px;
+            font-size: 20px;
+        }
+
+        /* OPEN ANIMATION */
+
+        .letter-shell.open .letter-cover {
+            transform: rotateX(-160deg);
+            opacity: 0;
+            pointer-events: none;
+            border-color: #292421;
+        }
+
+        .letter-shell.open .letter-content {
+            max-height: 2000px;
+            opacity: 1;
+            visibility: visible;
+            padding: 45px;
+            margin-top: -300px;
+        }
+
+        .ending {
+            text-align: center;
+            padding: 100px 20px 60px;
+        }
+
+        .ending h2 {
+            font-size: clamp(30px, 6vw, 60px);
+            font-weight: 300;
+            color: #c5b4a7;
+        }
+
+        .ending h2 span {
+            color: #b99b85;
+            font-style: italic;
+        }
+
+        .ending p {
+            color: #666;
+            margin-top: 25px;
+            font-size: 12px;
+            letter-spacing: 3px;
+            line-height: 2;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 10px;
+            color: #444;
+            font-size: 10px;
+            letter-spacing: 3px;
+            margin-top: auto;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 25px 18px;
+            }
+
+            section {
+                padding: 70px 0;
+            }
+
+            .memory-card {
+                grid-template-columns: 1fr;
+                padding: 15px;
+                gap: 20px;
+            }
+
+            .memory-image {
+                height: 350px;
+            }
+
+            .memory-text {
+                padding: 15px;
+            }
+
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .gallery-item {
+                height: 220px;
+            }
+
+            .letter-cover {
+                min-height: 260px;
+                padding: 30px;
+            }
+
+            .letter-content {
+                padding: 0 25px;
+            }
+
+            .letter-shell.open .letter-content {
+                padding: 30px;
+                margin-top: -260px;
+            }
+
+            .hero {
+                min-height: 80vh;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .gallery-item {
+                height: 180px;
+            }
+
+            .memory-image {
+                height: 280px;
+            }
+
+            .letter-cover {
+                min-height: 230px;
+                padding: 25px;
+            }
+
+            .letter-shell.open .letter-content {
+                margin-top: -230px;
+                padding: 25px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+                animation-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <a href="index.html" class="back">
+            ← Back to everyone
+        </a>
+
+        <div class="hero">
+
+            <div class="small-title">
+                A LITTLE PLACE FOR YOU
+            </div>
+
+            <h1>For <span>Ate Daisy.</span></h1>
+
+            <p>
+                Oh, you're finally here!
+                I was hoping you'd visit.
+                <br>
+                I made a little something for you.
+            </p>
+
+            <a href="#memories" class="enter">
+                ENTER YOUR LITTLE WORLD
+            </a>
+
+        </div>
+
+        <section id="memories">
+
+            <div class="section-title">
+                <p>CHAPTER ONE</p>
+                <h2>A little <span>appreciation</span></h2>
+            </div>
+
+            <div class="memory-card">
+
+                <div class="memory-image"></div>
+
+                <div class="memory-text">
+
+                    <div class="number">
+                        002 — A LITTLE THANK YOU
+                    </div>
+
+                    <h3>You made the little things special.</h3>
+
+                    <p>
+                        Ate Daisy, thank you for the kindness
+                        and the little moments you've shared
+                        with us. Sometimes, it's the simplest
+                        things that make a day better.
+                    </p>
+
+                    <p>
+                        You're awesome, Ate Daisy.
+                        I'm really glad I got to know you
+                        and share these memories with you.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section>
+
+            <div class="section-title">
+                <p>CHAPTER TWO</p>
+                <h2>Little <span>moments</span></h2>
+            </div>
+
+            <div class="gallery">
+
+                <div class="gallery-item">
+                    <img src="daisy3.jpeg"
+                         alt="A memory with Ate Daisy">
+                </div>
+
+                <div class="gallery-item">
+                    <img src="daisy4.jpg"
+                         alt="A special memory">
+                </div>
+
+                <div class="gallery-item">
+                    <img src="daisy5.jpg"
+                         alt="A little moment together">
+                </div>
+
+            </div>
+
+        </section>
+
+        <div class="quote">
+
+            <p>
+                "A true friend shows love at all times."
+            </p>
+
+            <span>PROVERBS 17:17</span>
+
+        </div>
+
+        <section>
+
+            <div class="section-title">
+                <p>CHAPTER THREE</p>
+                <h2>Something I <span>wanted to say</span></h2>
+            </div>
+
+            <div class="letter-shell" id="letter">
+
+                <button class="letter-cover"
+                        id="letterCover"
+                        aria-expanded="false"
+                        aria-controls="letterContent">
+
+                    <div class="label">
+                        A LETTER FOR YOU
+                    </div>
+
+                    <h3>
+                        Something I
+                        wanted to say.
+                    </h3>
+
+                    <div class="paper-line"></div>
+
+                    <div class="open-hint">
+                        CLICK TO OPEN
+                    </div>
+
+                    <div class="cover-decoration">
+                        For Ate Daisy.
+                    </div>
+
+                </button>
+
+                <div class="letter-content" id="letterContent">
+
+                    <div class="label">
+                        A LETTER FOR YOU
+                    </div>
+
+                    <h3>Dear Ate Daisy,</h3>
+
+                    <p>
+                        I just wanted to say thank you
+                        for being part of our little journey.
+                        I'm really glad I got to know you
+                        and share these moments with you.
+                    </p>
+
+                    <p>
+                        And a BIG thank you for the
+                        CHANELL-AS prize I won!
+                        I really appreciate it, Ate Daisy.
+                        That was so kind of you, and
+                        I'll definitely remember it.
+                    </p>
+
+                    <p>
+                        I hope you keep smiling and
+                        enjoying the little things.
+                        May Jehovah continue to guide you,
+                        give you strength, and bless you
+                        with peaceful and happy days.
+                    </p>
+
+                    <p>
+                        It's a little sad knowing that
+                        things won't always be the same,
+                        but I'm happy we got to be
+                        part of each other's memories.
+                        I hope whenever you look back
+                        on these days, you'll smile
+                        and remember them fondly.
+                    </p>
+
+                    <p>
+                        Thank you for being you,
+                        Ate Daisy. You're appreciated
+                        more than you probably realize.
+                    </p>
+
+                    <div class="signature">
+                        With a big thank you ♡
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <div class="ending">
+
+            <h2>Until we meet <span>again.</span></h2>
+
+            <p>
+                THANK YOU FOR BEING PART OF BAGTAS CONGREGATION
+            </p>
+
+            <p>
+                YOU ARE ALWAYS WELCOME HERE
+            </p>
+
+        </div>
+
+        <footer>
+            MADE WITH A LITTLE THOUGHT
+        </footer>
+
+    </div>
+
+    <script>
+        const letter = document.getElementById("letter");
+        const letterCover = document.getElementById("letterCover");
+
+        letterCover.addEventListener("click", function () {
+            letter.classList.add("open");
+            letterCover.setAttribute("aria-expanded", "true");
+        });
+    </script>
+
+</body>
+</html>
